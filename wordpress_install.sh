@@ -1,28 +1,28 @@
 ###############
 
+silent() { "$@" >/dev/null 2>&1; }
+
 echo "Installing Dependencies"
-apt-get install -y curl
-apt-get install -y sudo
-apt-get install -y mc
+silent apt-get install -y curl sudo mc
 echo "Installed Dependencies"
 
 WORDPRESS_DIR=/var/www/wordpress
 
 # Install Apache, PHP, and necessary PHP extensions
 echo "Installing Apache and PHP..."
-sudo apt install apache2 libapache2-mod-php php-gd php-sqlite3 php-mysql php-mbstring php-xml php-zip -y
+silent apt install apache2 libapache2-mod-php php-gd php-sqlite3 php-mysql php-mbstring php-xml php-zip -y
 
 # Enable Apache mods
-sudo a2enmod rewrite
+a2enmod rewrite
 
 # Install Wordpress
 echo "Installing Wordpress..."
-sudo mkdir -p ${WORDPRESS_DIR}
+mkdir -p ${WORDPRESS_DIR}
 cd ${WORDPRESS_DIR}/..
-sudo wget https://wordpress.org/latest.tar.gz -O latest.tar.gz
-sudo tar -xzf latest.tar.gz -C ${WORDPRESS_DIR} --strip-components=1
-sudo rm latest.tar.gz
-sudo chown -R www-data:www-data ${WORDPRESS_DIR}
+wget https://wordpress.org/latest.tar.gz -O latest.tar.gz
+tar -xzf latest.tar.gz -C ${WORDPRESS_DIR} --strip-components=1
+rm latest.tar.gz
+chown -R www-data:www-data ${WORDPRESS_DIR}
 
 # Configure Apache to serve Wordpress
 echo "Configuring Apache..."
@@ -45,16 +45,16 @@ echo "<VirtualHost *:80>
 </VirtualHost>" | sudo tee $WORDPRESS_CONF
 
 
-sudo a2ensite wordpress.conf
-sudo a2dissite 000-default.conf
-sudo systemctl restart apache2
+a2ensite wordpress.conf
+a2dissite 000-default.conf
+systemctl restart apache2
 
 echo "Wordpress installation completed successfully!"
 echo "You can access Wordpress at: http://${DOMAIN_OR_IP}/"
 
 echo "Cleaning up"
-apt-get -y autoremove
-apt-get -y autoclean
+silent apt-get -y autoremove
+silent apt-get -y autoclean
 echo "Cleaned"
 
 ##############
