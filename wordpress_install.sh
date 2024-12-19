@@ -10,7 +10,7 @@ WORDPRESS_DIR=/var/www/wordpress
 
 # Install Apache, PHP, and necessary PHP extensions
 echo "Installing Apache and PHP..."
-silent apt install apache2 libapache2-mod-php php-gd php-sqlite3 php-mysql php-mbstring php-xml php-zip -y
+silent apt-get install apache2 libapache2-mod-php php-gd php-sqlite3 php-mysql php-mbstring php-xml php-zip -y
 
 # Enable Apache mods
 a2enmod rewrite
